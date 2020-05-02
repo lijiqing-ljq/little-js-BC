@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>13-JavaScript-移入移出事件</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            width: 300px;
+            height: 300px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div></div>
+<script>
+    let oDiv = document.querySelector("div");
+    // 1.移入事件
+    // oDiv.onmouseover = function () {
+    //     console.log("移入事件");
+    // }
+    // 注意点: 对于初学者来说, 为了避免未知的一些BUG, 建议使用onmouseenter
+    // oDiv.onmouseenter = function () {
+    //     console.log("移入事件");
+    // }
+
+    // 2.移出事件
+    // oDiv.onmouseout = function () {
+    //     console.log("移出事件");
+    // }
+    // 注意点: 对于初学者来说, 为了避免未知的一些BUG, 建议使用onmouseleave
+    // oDiv.onmouseleave = function () {
+    //     console.log("移出事件");
+    // }
+    // 3.移动事件
+    oDiv.onmousemove = function () {
+        console.log("移动事件");
+    }
+</script>
+</body>
+</html>

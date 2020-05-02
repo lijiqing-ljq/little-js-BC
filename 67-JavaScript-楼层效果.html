@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>67-JavaScript-楼层效果</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+        }
+        ul{
+            width: 100%;
+            height: 100%;
+        }
+        ul>li{
+            list-style: none;
+            width: 100%;
+            height: 100%;
+            font-size: 100px;
+            text-align: center;
+        }
+        ol{
+            position: fixed;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        ol>li{
+            list-style: none;
+            width: 100px;
+            line-height: 40px;
+            text-align: center;
+            border: 1px solid #000;
+        }
+        .selected{
+            background: deepskyblue;
+        }
+    </style>
+</head>
+<body>
+<ul>
+    <li>我是第1层</li>
+    <li>我是第2层</li>
+    <li>我是第3层</li>
+    <li>我是第4层</li>
+    <li>我是第5层</li>
+</ul>
+<ol>
+    <li class="selected">第1层</li>
+    <li>第2层</li>
+    <li>第3层</li>
+    <li>第4层</li>
+    <li>第5层</li>
+</ol>
+<script src="js/animation2.js"></script>
+<script src="js/tools.js"></script>
+<script>
+    // 1.初始化楼层的颜色
+    let oPages = document.querySelectorAll("ul>li");
+    let colorArr = ['green', 'blue', 'purple', 'red', 'yellow'];
+    for(let i = 0; i < oPages.length; i++){
+        let page = oPages[i];
+        page.style.background = colorArr[i];
+    }
+    // 2.实现点击谁就选中谁
+    let oItems = document.querySelectorAll("ol>li");
+    let currentItem = oItems[0];
+    // 获取可视区域的高度
+    let screenHeight = getScreen().height;
+
+    let timerId = null;
+    for(let i = 0; i < oItems.length; i++){
+        let item = oItems[i];
+        item.onclick = function () {
+            currentItem.className = "";
+            this.className = "selected";
+            currentItem = this;
+            // 实现滚动
+            // window.scrollTo(0, i * screenHeight);
+            // 注意点: 通过documentElement.scrollTop来实现网页滚动, 在设置值的时候不能添加单位
+            // document.documentElement.scrollTop = i * screenHeight + "px";
+            // document.documentElement.scrollTop = i * screenHeight;
+            clearInterval(timerId);
+            timerId = setInterval(function () {
+                let begin = document.documentElement.scrollTop;
+                let target = i * screenHeight;
+                let step = (target - begin) * 0.2;
+                begin += step;
+                if(Math.abs(Math.floor(step)) <= 1){
+                    clearInterval(timerId);
+                    document.documentElement.scrollTop = i * screenHeight;
+                    return;
+                }
+                document.documentElement.scrollTop = begin;
+            }, 50);
+        }
+    }
+</script>
+</body>
+</html>

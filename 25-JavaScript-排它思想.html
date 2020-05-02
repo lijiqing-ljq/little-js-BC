@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>25-JavaScript-排它思想</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul{
+            width: 400px;
+            border: 1px solid #000;
+            margin: 100px auto;
+        }
+        .current{
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<ul>
+    <li class="current">我是第1个li</li>
+    <li>我是第2个li</li>
+    <li>我是第3个li</li>
+    <li>我是第4个li</li>
+    <li>我是第5个li</li>
+</ul>
+<script>
+    /*
+    1.什么是排它思想?
+    清除其它非选中元素的样式, 只设置当前选中元素样式
+    */
+    let oItems = document.querySelectorAll("li");
+    let previousIndex = 0;
+    /*
+    for(let i = 0; i < oItems.length; i++){
+        let item = oItems[i];
+        item.onclick = function () {
+            // 排它
+            // for(let j = 0; j < oItems.length; j++){
+            //     let li = oItems[j];
+            //     li.className = "";
+            // }
+            let preItem = oItems[previousIndex];
+            preItem.className = "";
+
+            this.className = "current";
+            previousIndex = i;
+        }
+    }
+    */
+    for(var i = 0; i < oItems.length; i++) {
+        var item = oItems[i];
+        (function (index) {
+            item.onclick = function () {
+                // 排它
+                var preItem = oItems[previousIndex];
+                preItem.className = "";
+
+                this.className = "current";
+                previousIndex = index;
+            }
+        })(i);
+    }
+</script>
+</body>
+</html>

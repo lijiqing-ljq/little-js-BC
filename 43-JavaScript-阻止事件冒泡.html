@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>43-JavaScript-阻止事件冒泡</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .father{
+            width: 300px;
+            height: 300px;
+            background: red;
+        }
+        .son{
+            width: 150px;
+            height: 150px;
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+<div class="father" id="father">
+    <div class="son" id="son"></div>
+</div>
+<script>
+    // 1.拿到需要操作的元素
+    var oFDiv = document.getElementById("father");
+    var oSDiv = document.getElementById("son");
+    
+    // 2.注册事件监听
+    oFDiv.onclick = function () {
+        console.log("father");
+    }
+    oSDiv.onclick = function (event) {
+        event = event || window.event;
+        // 注意点: stopPropagation方法只支持高级浏览器
+        // event.stopPropagation();
+        // event.cancelBubble = true; // 低级浏览器
+        if(event.cancelBubble){
+            event.cancelBubble = true;
+        }else{
+            event.stopPropagation();
+        }
+        console.log("son");
+    }
+</script>
+</body>
+</html>

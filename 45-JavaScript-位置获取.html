@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>45-JavaScript-位置获取</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            width: 100px;
+            height: 100px;
+            background: red;
+            margin-left: 100px;
+            margin-top: 800px;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+<script>
+    /*
+    offsetX/offsetY: 事件触发相对于当前元素自身的位置
+    clientX/clientY: 事件触发相对于浏览器可视区域的位置
+    注意点: 可视区域是不包括滚动出去的范围的
+    pageX/pageY:     事件触发相对于整个网页的位置
+    主要点: 整个网页包括滚动出去的范围的
+    screenX/screenY: 事件触发相对于屏幕的位置
+    */
+    var oDiv = document.getElementById("box");
+    oDiv.onclick = function (event) {
+        event = event || window.event;
+        // console.log("offsetX", event.offsetX);
+        // console.log("offsetY", event.offsetY);
+        /*
+        console.log("clientX", event.clientX);
+        console.log("clientY", event.clientY);
+        console.log("----------------------");
+        console.log("pageX", event.pageX);
+        console.log("pageY", event.pageY);
+        */
+        console.log(event.screenX);
+        console.log(event.screenY);
+    }
+</script>
+</body>
+</html>

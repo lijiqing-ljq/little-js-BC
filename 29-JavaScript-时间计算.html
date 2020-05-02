@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>29-JavaScript-时间计算</title>
+</head>
+<body>
+<script>
+    // 1000毫秒 = 1秒   60秒 = 1分钟  60分钟 = 1小时  24小时 = 1天
+    // 以下两个时间相差值 10天1小时29分40秒
+    let curDate = new Date("2020-4-19 22:30:20");
+    console.log(curDate);
+    
+    let remDate = new Date("2020-4-30 00:00:00");
+    // 1.得到两个时间之间的差值(毫秒)
+    let differTime = remDate - curDate;
+    console.log(differTime);
+    
+    // let differTime = remDate.valueOf() - curDate.valueOf();
+    // 2.得到两个时间之间的差值(秒)
+    let differSecond = differTime / 1000;
+    // 3.利用相差的总秒数 / 每一天的秒数 = 相差的天数
+    let day = Math.floor(differSecond / (60 * 60 * 24));
+    console.log(day);
+    // 4.利用相差的总秒数 / 小时 % 24;
+    let hour = Math.floor(differSecond / (60 * 60) % 24);
+    console.log(hour);
+    // 5.利用相差的总秒数 / 分钟 % 60;
+    let minute = Math.floor(differSecond / 60 % 60);
+    console.log(minute);
+    // 6.利用相差的总秒数 % 秒数
+    let second = differSecond % 60;
+    console.log(second);
+</script>
+</body>
+</html>

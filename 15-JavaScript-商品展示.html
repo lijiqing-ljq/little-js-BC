@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>15-JavaScript-商品展示</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            width: 430px;
+            margin: 100px auto;
+            border: 1px solid #000;
+        }
+        ul{
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+        }
+        ul>li>img{
+            width: 80px;
+            height: 80px;
+            vertical-align: bottom;
+        }
+        ul>li{
+            border: 2px solid transparent;
+            box-sizing: border-box;
+        }
+        .current{
+            border: 2px solid skyblue;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <img src="images/pic1.jpg" alt="">
+    <ul>
+        <li><img src="images/pic1.jpg" alt=""></li>
+        <li><img src="images/pic2.jpg" alt=""></li>
+        <li><img src="images/pic3.jpg" alt=""></li>
+        <li><img src="images/pic4.jpg" alt=""></li>
+        <li><img src="images/pic5.jpg" alt=""></li>
+    </ul>
+</div>
+<script>
+    // 1.拿到需要操作的元素
+    let oImg = document.querySelector("div>img");
+    let oItems = document.querySelectorAll("li>img");
+    // 2.给每一个小图添加移入和移出事件
+    for(let item of oItems){
+        // 监听移入事件
+        item.onmouseenter = function () {
+            // 1.给当前小图的父元素添加边框
+            this.parentNode.className = "current";
+            // 2.将当前小图的图片地址设置给大图
+            oImg.src = this.src;
+        }
+        // 监听移出事件
+        item.onmouseleave = function () {
+            // 1.移除当前小图父元素的边框
+            this.parentNode.className = "";
+        }
+    }
+</script>
+</body>
+</html>

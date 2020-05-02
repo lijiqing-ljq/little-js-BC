@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+    <meta charset="utf-8"/>
+     <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+
+    <title>ArcGIS demo</title>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.12/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.12/"></script>
+    <link type="text/css" rel="stylesheet" href="http://localhost/arcgis/esri/css/main.css"/>
+    <script src="http://localhost/arcgis/init.js"></script>
+ 
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+ 
+<body>
+<div id="viewDiv"></div>
+<script>
+    require(["esri/Map",
+        "dojo/_base/xhr",
+        "esri/config",
+        "esri/views/MapView",
+        "esri/Graphic",
+        "dojo/domReady"
+    ], function (Map,
+                 xhr,
+                 esriConfig,
+                 MapView,
+                 Graphic
+    ) {
+        var map = new Map({
+            basemap: "streets"//ESRI提供的底 图
+        });
+ 
+        //二维视图
+        var view = new MapView({
+            map: map,
+            container: "viewDiv",
+            center: [118.55019107002441,29.300640724771107],
+            zoom: 5
+        });
+        view.when(function () {
+            //使用dojo框架进行请求
+            xhr.post({
+                url:"heat.json",
+                handleAs : "json",
+                load : function(data) {
+                    var markerSymbol = {
+                        type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
+                        color: [226, 119, 40]
+                    };
+                    data.heatData.forEach(function (json,index) {
+                        var x = json.lng;
+                        var y = json.lat;
+                        var point={
+                            type: "point",
+                            longitude: x,
+                            latitude: y};
+                        var graphic =new Graphic({
+                            geometry: point,
+                            symbol: markerSymbol
+                        });
+                        //将graphics添加到视窗图层
+                        view.graphics.add(graphic);
+                    });
+                },
+                error:function (error) {
+                    console.log("error"+error);
+                }
+            });
+        }).catch(function (reason) {
+            console.log(reason)
+        });
+    })
+</script>
+</body>
+ 
+</html>

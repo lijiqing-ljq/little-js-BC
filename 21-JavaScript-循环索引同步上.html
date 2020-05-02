@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>21-JavaScript-循环索引同步上</title>
+</head>
+<body>
+<script>
+    /*
+    默认情况下是顺序结构, 代码会从上之下的执行, 前面的没执行完后面的不能执行
+    默认情况下通过var定义的变量, 只要不是定义在函数中都是全局变量
+    */
+    /*
+    for(var i = 0; i < 3; i++){ // 0 1 2 3
+        function test() {
+            console.log(i); // 3
+        }
+    }
+    // console.log(i); // 3
+    test();
+    */
+    /*
+    for(var i = 0; i < 3; i++){ // 0 1 2 3
+        function test() {
+            console.log(i); // 0 1 2
+        }
+        test();
+    }
+    */
+    /*
+    for(var i = 0; i < 3; i++){ // 0 1 2 3
+        (function test() {
+            console.log(i); // 0 1 2
+        })();
+    }
+     */
+    /*
+    for(var i = 0; i < 3; i++){ // 0 1 2 3
+        // function test(index) { // var index = i;
+        //     console.log(index); // 0 1 2
+        // }
+        // test(i);
+        (function test(index) {
+            console.log(index); // 0 1 2
+        })(i);
+    }
+    */
+</script>
+</body>
+</html>

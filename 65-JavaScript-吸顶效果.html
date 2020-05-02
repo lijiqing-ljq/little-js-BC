@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>65-JavaScript-吸顶效果</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        img{
+            width: 100%;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+<img src="images/nba-top.jpg" alt="" id="top">
+<img src="images/nba-nav.jpg" alt="" id="nav">
+<img src="images/nba-body.jpg" alt="">
+<script src="js/tools.js"></script>
+<script>
+    // 1.拿到需要操作的元素
+    let oTop = document.querySelector("#top");
+    let oNav = document.querySelector("#nav");
+    // 2.获取顶部LOGO区域的高度
+    let topHeight = oTop.offsetHeight;
+    // 3.监听网页的滚动
+    window.onscroll = function () {
+        // 拿到滚动出去的距离
+        let offsetY = getPageScroll().y;
+        // 判断滚动出去的距离是否已经大于等于顶部LOGO的高度
+        if(offsetY >= topHeight){
+            oNav.style.position = "fixed";
+            oNav.style.top = "0px";
+            oNav.style.left = "0px";
+        }else{
+            oNav.style.position = "";
+        }
+    }
+</script>
+</body>
+</html>

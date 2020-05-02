@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>61-JavaScript-百度登录</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        p{
+            background: deepskyblue;
+            text-align: center;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+        }
+        .mask{
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+        }
+        .login{
+            width: 400px;
+            height: 300px;
+            background: purple;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            cursor: move;
+        }
+        .login>span{
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: red;
+            position: absolute;
+            top: 0;
+            right: 0px;
+        }
+    </style>
+</head>
+<body>
+<p>我是p标签</p>
+<a href="http://www.it666.com">官网</a>
+<div class="mask"></div>
+<div class="login">
+    <span></span>
+</div>
+<script>
+    // 1.拿到需要操作的元素
+    let oBtn = document.querySelector("p");
+    let oMaskDiv = document.querySelector(".mask");
+    let oLoginDiv = document.querySelector(".login");
+    let oCloseBtn = document.querySelector("span");
+    // 2.监听点击事件
+    oBtn.onclick = function () {
+        oMaskDiv.style.display = "block";
+        oLoginDiv.style.display = "block";
+    }
+    oCloseBtn.onclick = function () {
+        oMaskDiv.style.display = "none";
+        oLoginDiv.style.display = "none";
+    }
+    // 3.监听登录框的按下和移动事件
+    oLoginDiv.onmousedown = function (event) {
+        event = event || window.event;
+        // 1.计算固定不变的距离
+        let x = event.pageX - oLoginDiv.offsetLeft;
+        let y = event.pageY - oLoginDiv.offsetTop;
+        // 2.监听移动事件
+        oLoginDiv.onmousemove = function (event) {
+            event = event || window.event;
+            // 3.计算移动之后的偏移位
+            let offsetX = event.pageX - x;
+            let offsetY = event.pageY - y;
+            // 4.重新设置登录框的位置
+            oLoginDiv.style.left = offsetX + "px";
+            oLoginDiv.style.top = offsetY + "px";
+        }
+    }
+    oLoginDiv.onmouseup = function () {
+        oLoginDiv.onmousemove = null;
+    }
+</script>
+</body>
+</html>

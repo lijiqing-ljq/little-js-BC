@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>18-JavaScript-表单效果</title>
+</head>
+<body>
+<form action="http://www.it666.com">
+    <input type="text" placeholder="请输入搜索关键字" name="text">
+    <input type="submit" value="搜索"><!-- disabled="disabled"-->
+</form>
+<script>
+    /*
+    需求: 输入框中没有内容就禁用提交按钮
+    */
+    let oText = document.querySelector("input[type=text]");
+    let oSubmit = document.querySelector("input[type=submit]");
+    // 在JS中如果HTML标签的属性名称和取值名称一样的时候, 那么JS会返回true/false
+    // console.log(oSubmit.disabled);
+    oSubmit.disabled = true;
+    
+    oText.oninput = function () {
+        // console.log(this.value.length);
+        oSubmit.disabled = this.value.length === 0;
+    }
+    // 通过代码给input设置数据
+    // 注意点: 如果是通过代码给input设置的数据, 那么不会触发oninput事件
+    oText.value = "abc";
+</script>
+</body>
+</html>

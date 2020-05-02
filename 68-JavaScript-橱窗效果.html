@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>68-JavaScript-橱窗效果</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box{
+            width: 800px;
+            height: 190px;
+            border: 1px solid #000;
+            margin: 100px auto;
+            overflow: hidden;
+        }
+        ul{
+            list-style: none;
+            display: flex;
+            position: relative;
+        }
+        ul img{
+            vertical-align: top;
+        }
+        .progress{
+            width: 100%;
+            height: 30px;
+            background: #ccc;
+            position: relative;
+        }
+        .progress>.line{
+            width: 100px;
+            height: 100%;
+            background: deeppink;
+            border-radius: 15px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <ul>
+        <li><img src="images/img1.jpg" alt=""></li>
+        <li><img src="images/img2.jpg" alt=""></li>
+        <li><img src="images/img3.jpg" alt=""></li>
+        <li><img src="images/img4.jpg" alt=""></li>
+        <li><img src="images/img5.jpg" alt=""></li>
+        <li><img src="images/img6.jpg" alt=""></li>
+        <li><img src="images/img7.jpg" alt=""></li>
+        <li><img src="images/img8.jpg" alt=""></li>
+        <li><img src="images/img9.jpg" alt=""></li>
+        <li><img src="images/img10.jpg" alt=""></li>
+    </ul>
+    <div class="progress">
+        <div class="line"></div>
+    </div>
+</div>
+<script>
+    // 1.拿到需要操作的元素
+    let oUl = document.querySelector("ul");
+    let oItems = document.querySelectorAll("ul>li");
+    let oProgress = document.querySelector(".progress");
+    let oBox = document.querySelector(".box");
+    let oLine = document.querySelector(".line");
+    // 2.计算UL的宽度
+    let ulWidth = oItems[0].offsetWidth * oItems.length;
+    // 3.设置UL的宽度
+    oUl.style.width = ulWidth + "px";
+    // 4.计算滚动条的宽度
+    // 滚动条的宽度 / 滚动条滚动范围 = 容器的宽度 / 内容的范围
+    // 滚动条的宽度  = 容器的宽度 / 内容的范围 * 滚动条滚动范围
+    let progressWidth = oProgress.offsetWidth;
+    let boxWidth = oBox.offsetWidth;
+    let lineWidth = boxWidth / ulWidth * progressWidth;
+    // 5.设置滚动条的宽度
+    oLine.style.width = lineWidth + "px";
+    // 计算滚动条最大能够滚动的范围
+    let maxLineX = progressWidth - lineWidth;
+    // 计算图片最大能够滚动的范围
+    let maxImgX = boxWidth - ulWidth;
+    // 6.监听鼠标按下的事件
+    oLine.onmousedown = function (event) {
+        event = event || window.event;
+        // 0.拿到滚动条当前的位置
+        let begin = parseFloat(oLine.style.left) || 0;
+        // 1.拿到鼠标在滚动条中按下的位置
+        let mouseX = event.pageX - oBox.offsetLeft;
+        // 7.监听鼠标移动的事件
+        oLine.onmousemove = function (event) {
+            event = event || window.event;
+            // 2.拿到鼠标在滚动条中移动之后的位置
+            let moveMouseX = event.pageX - oBox.offsetLeft;
+            // 3.计算偏移位
+            let offsetX = moveMouseX - mouseX + begin;
+            // 4.安全校验
+            offsetX = offsetX < 0 ? 0 : offsetX;
+            offsetX = offsetX > maxLineX ? maxLineX : offsetX;
+            // 5.重新设置滚动条的位置
+            oLine.style.left = offsetX + "px";
+            // 6.计算图片的滚动距离
+            // 滚动条滚动的距离 / 滚动条最大能够滚动的范围 = 图片滚动的距离 / 图片最大能够滚动的范围
+            // 滚动条滚动的距离 / 滚动条最大能够滚动的范围 * 图片最大能够滚动的范围 = 图片滚动的距离
+            let imgOffsetX = offsetX / maxLineX * maxImgX;
+            // 7.重新设置图片的位置
+            oUl.style.left = imgOffsetX + "px";
+        }
+    }
+    document.onmouseup = function () {
+        oLine.onmousemove = null;
+    }
+</script>
+</body>
+</html>

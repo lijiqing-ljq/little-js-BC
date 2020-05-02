@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+			//			1.URL地址防注入：
+
+			//过滤URL非法SQL字符
+			var sUrl = location.search.toLowerCase();
+			var sQuery = sUrl.substring(sUrl.indexOf("=") + 1);
+			var re = /select|update|delete|truncate|join|union|exec|insert|drop|count|'|"|;|>|<|%/i;
+			if(re.test(sQuery)) {
+				alert("请勿输入非法字符");
+				//				location.href = sUrl.replace(sQuery, "");
+				location.search = sUrl.replace(sQuery, "");
+
+			}
+
+			//			2.输入文本框防注入：
+			function AntiSqlValid(oField) {
+				var re = /select|update|delete|exec|count|'|"|=|;|>|<|%/i;
+				if(re.test(oField.value)) {
+					//alert("请您不要在参数中输入特殊字符和SQL关键字！"); //注意中文乱码
+					oField.value = ";
+					oField.className = "errInfo";
+					oField.focus();
+					return false;
+				}
+			}
+			//			　在需要防注入的输入文本框添加如下方法
+			txtName.Attributes.Add("onblur", "AntiSqlValid(this)"); //防止Sql脚本注入
+		</script>
+	</body>
+
+</html>

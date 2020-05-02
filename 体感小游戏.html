@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin: -30px 0 0 -30px;
+            width: 60px;
+            height: 60px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <input type="button" id="btn" value="开启游戏" />
+    <div id="box"></div>
+<script>
+function throttle(fn,interval=200,start = true){
+    if(typeof fn !== "function"){
+        return console.error("请传入一个函数");
+    }
+    let timer = 0;
+    return function(...arg){
+        let _this = this;
+        if(timer){
+            return ;
+        }
+        start&&fn.apply(_this,arg); 
+        timer = setTimeout(() => {
+            (!start)&&fn.apply(_this,arg); 
+            timer = 0;
+        }, interval);
+    }
+}    
+// 判断是否是 ios 设备    
+function getIos(){
+    var u = window.navigator.userAgent;
+    return !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+}
+function permissionForShake(fn){
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        DeviceMotionEvent.requestPermission().then((permissionState)=>{
+            if(permissionState === 'granted'){ //用户授权允许使用加速度信息
+                window.addEventListener("devicemotion",fn);  
+            }
+        }).catch((err)=>{
+            console.log(err);
+        })
+    } else {
+        window.addEventListener("devicemotion",fn); 
+    }
+}    
+{
+    let btn = document.querySelector("#btn");
+    let box = document.querySelector("#box");
+    let translateX = 0;
+    box.style.transform = `translateX(${translateX}px)`;
+    btn.onclick = function(){
+        permissionForShake((e)=>{
+            let x1 = e.acceleration.x;
+            let x2 = e.accelerationIncludingGravity.x;
+            let x = x2 - x1;
+            if(!getIos()){
+                x = -x;
+            }
+            translateX += x*.5;
+            box.style.transform = `translateX(${translateX}px)`;
+        });
+    };
+}
+
+</script> 
+</body>
+</html>

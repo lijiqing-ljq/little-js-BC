@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<style>
+			#box {
+				width: 300px;
+				height: 300px;
+				background: red;
+				font: 20px/40px "宋体";
+				color: #fff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box"></div>
+		<script>
+			/*
+															    函数节流[throttle]
+															    - 让函数保持在一个可接受的固定频率执行
+															*/
+			function throttle(fn, interval = 200, start = true) {
+				if(typeof fn !== "function") {
+					return console.error("请传入一个函数");
+				}
+				let timer = 0;
+				return function(...arg) {
+					let _this = this;
+					if(timer) {
+						return;
+					}
+					start && fn.apply(_this, arg);
+					timer = setTimeout(() => {
+						(!start) && fn.apply(_this, arg);
+						//          clearTimeout(timer);
+						console.log(timer);
+						timer = 0;
+						console.log(timer);
+					}, interval);
+				}
+			}
+			let box = document.querySelector("#box");
+			let timer = 0;
+			// box.onmousemove = function(){
+			//     if(timer){
+			//         return ;
+			//     }
+			//     timer = setTimeout(()=>{
+			//         console.log("mousemove");
+			//         timer = 0;
+			//     },500);
+			// };
+			box.onmousemove = throttle(function(e) {
+				console.log("mousemove", e, this);
+			}, 500, true);
+		</script>
+		<script type="text/javascript">
+			/**
+			 * @desc 函数防抖
+			 * @param func 函数
+			 * @param wait 延迟执行毫秒数
+			 * @param immediate true 表立即执行，false 表非立即执行
+			 */
+			function debounce(func, wait, immediate) {
+				let timeout;
+
+				return function(...args) {
+					let context = this;
+					//					let args = arguments;
+					timeout && clearTimeout(timeout);
+					//					if(timeout) clearTimeout(timeout);
+					//					if(immediate) {
+					//						var callNow = !timeout;
+					//						timeout = setTimeout(() => {
+					//							timeout = null;
+					//						}, wait)
+					//						if(callNow) func.apply(context, args)				
+					//					}else {
+					if(immediate) {
+						func.apply(context, args);
+						immediate = false;
+					}
+					//					immediate && func.apply(context, args);
+					timeout = setTimeout(function() {
+						func.apply(context, args);
+						immediate = false;
+					}, wait);
+					//					}
+				}
+			}
+
+			/**
+			 * @desc 函数节流
+			 * @param func 函数
+			 * @param wait 延迟执行毫秒数
+			 * @param type 1 表时间戳版，2 表定时器版
+			 */
+			function throttle(func, wait, type) {
+				if(type === 1) {
+					let previous = 0;
+				} else if(type === 2) {
+					let timeout;
+				}
+				return function() {
+					let context = this;
+					let args = arguments;
+					if(type === 1) {
+						let now = Date.now();
+
+						if(now - previous > wait) {
+							func.apply(context, args);
+							previous = now;
+						}
+					} else if(type === 2) {
+						if(!timeout) {
+							timeout = setTimeout(() => {
+								timeout = null;
+								func.apply(context, args)
+							}, wait)
+						}
+					}
+				}
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<!--<script type="text/javascript" src="promise源码实现.js"></script>-->
+		<script type="text/javascript">
+			//import promise from "./promise源码实现"
+			//			const promise = require("./promise源码实现");
+
+			//			Function.prototype.MyBind = function(target) {
+			//				var self = this;
+			//				var args = [].slice.call(arguments, 1);
+			//				var temp = function() {};
+			//				var f = function() {
+			//					var _arg = [].slice.call(arguments, 0);
+			//					return self.apply(this instanceof temp ? this : target, args.concat(_arg));
+			//				}
+			//				temp.prototype = self.prototype;
+			//				console.log("000", temp.prototype.constructor, self.prototype.constructor);
+			//				f.prototype = new temp();
+			//				console.log("aaa", ((new f()) instanceof self), ((new f()) instanceof temp));
+			//				return f;
+			//			};
+			//
+			//			function show(x, y, z, w) {
+			//				console.log("111", this, x, y, z, w);
+			//				//return {y:666};
+			//			}
+			//			var DuyiO = {
+			//				x: 20
+			//			}
+			//			var newShow1 = show.MyBind(DuyiO, "1", "2", 3);
+			//			newShow1(4); //Object {x: 20} "1" "2" 3 4
+			//			var newShow4 = show.bind(DuyiO, "1", "2", 3);
+			//			newShow4(4); //Object {x: 20} "1" "2" 3 4
+			//
+			//			var newShow2 = show.MyBind(undefined, "1", "2", 3);
+			//			newShow2(4);
+			//			var newShow5 = show.bind(undefined, "1", "2", 3);
+			//			newShow5(4);
+			//
+			//			var newShow3 = show.MyBind(DuyiO, "1", "2", 3);
+			//			var a = new newShow3(4);
+			//			var newShow6 = show.bind(DuyiO, "1", "2", 3);
+			//			var b = new newShow3(4);
+			//			console.log("222", typeof a, typeof b, show, a, b);
+			//
+			//			let e = props => ({ ...props.good
+			//			}, { ...props.works
+			//			})
+			//
+			//			let c = e({
+			//				good: {
+			//					h: 1
+			//				},
+			//				works: {
+			//					f: 2
+			//				}
+			//			});
+			//			let d = e({
+			//				good: {
+			//					h: 1
+			//				},
+			//				works: 2
+			//			});
+			//			let g = e({
+			//				good: 1,
+			//				works: {
+			//					f: 2
+			//				}
+			//			});
+			//			let h = e({
+			//				good: 1,
+			//				works: 2
+			//			});
+			//			console.log(5, e, c, d, g, h);
+			//			let t = f => console.log("fn");
+			//			let s = t();
+			//			console.log(s);
+			//
+			//			// 这种方法会有一个问题：[1,'1']会被当做相同元素，最终输入[1]
+			//			let arr = [1, 1, "1", 2, 3, 4, 5, 5, 6]
+			//			let arr2 = arr.filter(function(item, index) {
+			//				// indexOf() 方法可返回某个指定的 字符串值 在字符串中首次出现的位置
+			//				return arr.indexOf(item) === index
+			//			})
+			//			console.log(arr, arr2);
+
+//			setTimeout(function() {
+//				console.log('setTimeout');
+//			})
+//
+//			new Promise(function(resolve) {
+//				setTimeout(function() {
+//					console.log('promise');
+//					resolve();
+//				})
+//			}).then(function() {
+//				console.log('then');
+//			})
+//
+//			console.log('console');
+//
+//			setTimeout(()  =>  console.log('a'));
+//			Promise.resolve().then(    ()  =>  console.log('b')  //题目中的这里引号错误，多了分号  或者这样写： () => {console.log('b');}
+//				 ).then(   ()  =>  Promise.resolve('c').then(     (data)  =>  {       
+//				setTimeout(()  =>  console.log('d'));       
+//				console.log('f');       
+//				return  data;     
+//			}   ) ).then(data  =>  console.log(data));
+			//b,f,c,a,d
+			
+			var a = [...[]].slice(1);
+			console.log(a)
+			console.log(new Array() == new Array(),[] == [],Number("undefined"),
+			[undefined].toString(),Number({a:1}),Number({}),Number([]),Number([1]),Number([,,,]),Number([1,2,3,4]))
+			
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>59-JavaScript-星空背景</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+        }
+        span{
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: url("images/star.png") no-repeat;
+            background-size: 100% 100%;
+            animation: flash 1s alternate infinite;
+            position: absolute;
+        }
+        @keyframes flash {
+            from{
+                opacity: 0;
+            }
+            to{
+                opacity: 1;
+            }
+        }
+        span:hover{
+            transform: scale(3, 3) rotate(180deg) !important;
+            transition: all 1s;
+        }
+    </style>
+</head>
+<body>
+<span></span>
+<script>
+    // 1.获取屏幕宽高
+    let {width, height} = getScreen();
+
+    // 2.创建星星
+    for(let i = 0; i < 200; i++){
+        // 1.添加星星
+        let oSpan = document.createElement("span");
+        document.body.appendChild(oSpan);
+        // 2.随机位置
+        let x = Math.random() * width;
+        let y = Math.random() * height;
+        oSpan.style.left = x + "px";
+        oSpan.style.top = y + "px";
+        // 3.随机缩放
+        let scale = Math.random() * 2;
+        oSpan.style.transform = `scale(${scale}, ${scale})`
+        // 4.随机动画延迟
+        let rate = Math.random() * 2;
+        oSpan.style.animationDelay = rate + "s";
+    }
+    function getScreen() {
+        let width, height;
+        if(window.innerWidth){
+            width = window.innerWidth;
+            height = window.innerHeight;
+        }else if(document.compatMode === "BackCompat"){
+            width = document.body.clientWidth;
+            height = document.body.clientHeight;
+        }else{
+            width = document.documentElement.clientWidth;
+            height = document.documentElement.clientHeight;
+        }
+        return {
+            width: width,
+            height: height
+        }
+    }
+</script>
+</body>
+</html>

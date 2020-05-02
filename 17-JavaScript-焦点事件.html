@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>17-JavaScript-焦点事件</title>
+</head>
+<body>
+<input type="text">
+<script>
+    let oInput = document.querySelector("input");
+    // 1.监听input获取焦点
+    // oInput.onfocus = function () {
+    //     console.log("获取到了焦点");
+    // }
+    // 2.监听input失去焦点
+    // oInput.onblur = function () {
+    //     console.log("失去了焦点");
+    // }
+    // 3.监听input内容改变
+    // 注意点: onchange事件只有表单失去焦点的时候, 才能拿到修改之后的数据
+    // oInput.onchange = function () {
+    //     console.log(this.value);
+    // }
+    // oninput事件可以时时获取到用户修改之后的数据, 只要用户修改了数据就会调用(执行)
+    // 注意点: oninput事件只有在IE9以及IE9以上的浏览器才能使用
+    // 在IE9以下, 如果想时时的获取到用户修改之后的数据, 可以通过onpropertychange事件来实现
+    oInput.oninput = function () {
+        console.log(this.value);
+    }
+</script>
+</body>
+</html>

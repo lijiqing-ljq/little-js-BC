@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+          content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+    <title>地图-画图工具</title>
+    <link rel="stylesheet"
+          href="http://localhost:8080/arcgis_js_api/library/3.20/3.20/dijit/themes/claro/claro.css">
+    <link rel="stylesheet"
+          href="http://localhost:8080/arcgis_js_api/library/3.20/3.20/esri/css/esri.css">
+    <style>
+        html, body {
+            height: 100%; width: 100%; margin: 0; padding: 0;
+        }
+    </style>
+    <script>
+        var dojoConfig = {
+            parseOnLoad: true   // 解析加载
+        };
+    </script>
+    <script src="http://localhost:8080/arcgis_js_api/library/3.20/3.20/init.js"></script>
+    <script>
+        // 导入包
+        dojo.require("esri.map");
+        dojo.require("esri.toolbars.draw");
+        dojo.require("esri.InfoTemplate");
+        dojo.require("esri.layers.ArcGISDynamicMapServiceLayer");
+        dojo.require("esri.layers.GraphicsLayer");
+        dojo.require("esri.symbols.SimpleMarkerSymbol");
+        dojo.require("esri.symbols.SimpleLineSymbol");
+        dojo.require("esri.graphic");
+
+        dojo.require("dijit.layout.BorderContainer");
+        dojo.require("dijit.layout.ContentPane");
+
+        var map, toolbar, symbol, geomTask,getThisPoint,layer,graphic,layer_first,layer_second;
+        function init() {
+            map = new esri.Map("map", {
+                // 指定的地图底图。以下是有效的选项："streets","satellite","hybrid","topo","gray","oceans","national-geographic","osm".
+                basemap: "streets",
+                // 经纬度
+                center: [-15.469, 36.428],
+                zoom: 3   // 缩放深度
+            });
+            //初始化地图服务
+            layer_first = new esri.layers.ArcGISTiledMapServiceLayer("http://www.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer");
+            layer_first.id = "layer_first_id";
+
+            layer_second = new esri.layers.ArcGISDynamicMapServiceLayer("http://cache1.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunityENG/MapServer");
+            layer_second.id = "layer_second_id";
+
+            map.addLayer(layer_first);
+            // 绑定地图加载事件
+            dojo.connect(map, "onLoad", createToolbar);
+            //绑定地图的点击事件
+            dojo.connect(map, "onClick", mapOnClick);
+            // 绑定初始化加载事件
+            dojo.connect(map, "onLoad", function() {
+                dojo.connect(map, "onMouseOver", map, "reposition");
+                map.infoWindow.setTitle("位置");
+                map.infoWindow.resize(200, 100);
+            });
+        }
+        //添加英文地图
+        function getEngMap(evt){
+            map.removeLayer(layer_first);
+            map.addLayer(layer_second);
+        }
+        //添加中文地图
+        function getChineseMap(evt){
+            map.removeLayer(layer_second);
+            map.addLayer(layer_first);
+        }
+        /*--------------------------------------地图点击打开提示窗口-------------------------------------------*/
+        //设置地图点击的事件
+        var i = 1;
+        //允许打开弹出窗口
+        function openWin(){
+            i++;
+        }
+        //取消提示窗口弹出
+        function closeWin(){
+            i=1;
+        }
+        function mapOnClick(evt) {
+            if(i%2!=0){
+                return;
+            }
+            //设置地图点击的样式
+            var onClickMapMarkerSymbol = new esri.symbol.SimpleMarkerSymbol(
+                esri.symbol.SimpleMarkerSymbol.STYLE_X,
+                12,
+                new esri.symbol.SimpleLineSymbol(
+                    esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+                    new dojo.Color([255,0,0,0.75]),
+                    4
+                )
+            );
+            // 在点击的位置添加图形
+            if (graphic) {
+                // 定义几何图，evt.mapPoint是Geometry的子类。
+                graphic.setGeometry(evt.mapPoint);
+            } else {
+                // 构建图像
+                graphic = new esri.Graphic(
+                    // 当前地图坐标点
+                    evt.mapPoint,
+                    // 标记符号
+                    onClickMapMarkerSymbol
+                );
+                // 将图像加入到地图中
+                map.graphics.add(graphic);
+            }
+            // 地图点击后显示信息窗口
+            var content = "Latitude（纬度） = ${y} <br/> Longitude（经度） = ${x}";
+            map.infoWindow.setContent(	// 设置内容，html或dom元素
+                esri.substitute(
+                    // esri.substitute(data, template?, first?)，占位符显示值方法
+                    esri.geometry.webMercatorToGeographic(evt.mapPoint),
+                    //从web 墨卡托单位到地理单位间的几何转换
+                    content
+                )
+            );
+            //地图点击后显示窗口位置
+            map.infoWindow.show(
+                // 屏幕坐标
+                evt.screenPoint,
+                // getInfoWindowAnchor(screenCoords) 在屏幕单位上的定位点。
+                map.getInfoWindowAnchor(evt.screenPoint)
+            );
+        }
+        /*----------------------------------------地图上绘制工具-----------------------------------*/
+        function createToolbar(themap) {
+            // esri.toolbars.Draw(map, options)
+            toolbar = new esri.toolbars.Draw(map);
+            // 绑定绘制完成的事件（绘制完成触发）
+            dojo.connect(toolbar, "onDrawEnd", addToMap);
+        }
+        //地图上添加相关绘制的工具以及绘制图形的样式
+        function addToMap(geometry) {
+            // 关闭工具栏并激活地图导航.
+            toolbar.deactivate();
+            //在地图上显示的缩放滑块
+            map.showZoomSlider();
+            /**
+             * 所有面符号的外边框
+             * @type {esri.symbol.SimpleLineSymbol}
+             */
+            var baseLineSym = new esri.symbol.SimpleLineSymbol(
+                // 样式,STYLE_DASH(破折号),STYLE_DASHDOT(点划线),STYLE_DASHDOTDOT,STYLE_DOT(点),STYLE_NULL,STYLE_SOLID(实线)
+                esri.symbol.SimpleLineSymbol.STYLE_DASHDOT,
+                // 颜色
+                new dojo.Color([255,0,0]),
+                // 像素
+                1
+            );
+            /**
+             * 基础面符号
+             * @type {esri.symbol.SimpleFillSymbol}
+             */
+            var baseFillSym = new esri.symbol.SimpleFillSymbol(
+                esri.symbol.SimpleFillSymbol.STYLE_SOLID,
+                baseLineSym,
+                new dojo.Color([255,255,0,0.25])
+            );
+            /**
+             * 基础点符号
+             * @type {esri.symbol.SimpleMarkerSymbol}
+             */
+            var baseMarkerSym = new esri.symbol.SimpleMarkerSymbol(
+                // 样式,STYLE_CIRCLE(●),STYLE_CROSS(+),STYLE_DIAMOND(◆),STYLE_SQUARE(■),STYLE_X(X)
+                esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE,
+                10,
+                //图形边框样式
+                baseLineSym,
+                // 颜色和透明度
+                new dojo.Color([0,255,0,0.25])
+            );
+            // 判断几何图形的类型
+            switch (geometry.type) {
+                case "point":
+                    var symbol = baseMarkerSym;
+                    break;
+                case "polyline":
+                    var symbol = baseLineSym;
+                    break;
+                case "polygon":
+                    var symbol = baseFillSym;
+                    break;
+                case "extent":
+                    var symbol = baseFillSym;
+                    break;
+                case "multipoint":
+                    var symbol = baseMarkerSym;
+                    break;
+            }
+            var graphic = new esri.Graphic(geometry, symbol);
+            // 将绘图加入到图层中
+            map.graphics.add(graphic);
+        }
+        /*--------------------------------------各个工具对应的绘制方法------------------------*/
+        //绘制椭圆
+        function drawEllipse(){
+            toolbar.activate(esri.toolbars.Draw.ELLIPSE);
+            map.hideZoomSlider();
+        }
+        //绘制圆形
+        function drawCircle(){
+            toolbar.activate(esri.toolbars.Draw.CIRCLE);
+            map.hideZoomSlider();
+        }
+        //绘制三角形
+        function drawTriangle(){
+            toolbar.activate(esri.toolbars.Draw.TRIANGLE);
+            map.hideZoomSlider();
+        }
+        //绘制三角形
+        function drawArrow(){
+            toolbar.activate(esri.toolbars.Draw.ARROW);
+            map.hideZoomSlider();
+        }
+
+        function clearMap(){
+            map.graphics.clear();
+        }
+
+        /*-----------------------------------------------------------------------------------------------------------*/
+        //线的绘制（未完成）
+        var arrayObj;
+        function drawLine(evt){
+            arrayObj = new Array();
+            arrayObj.push(evt.mapPoint);
+            if(arrayObj.size==2){
+                var fi = evt.mapPoint;
+                var polyline = new esri.geometry.Polyline(arrayObj);
+                var symbol = new esri.symbol.SimpleLineSymbol(
+                    esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+                    new dojo.Color([255,255,0]),
+                    2
+                );
+                var graphic = new esri.Graphic(polyline, symbol);
+                map.graphics.add(graphic);
+                arrayObj = null;
+            }
+        }
+
+        /*------------------------------------------初始化加载--------------------------------*/
+        dojo.ready(init);
+    </script>
+</head>
+<body class="claro">
+<div id="mainWindow" data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="design:'headline'" style="width:100%; height:100%;">
+    <div id="header" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'top'" style="height:150px;text-align:left;font-weight:bold;font-size:14px;color:#400D12;overflow:hidden;">
+        <span>线绘制:<br /></span>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){toolbar.activate(esri.toolbars.Draw.POINT);map.hideZoomSlider();}">Point(点)</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){toolbar.activate(esri.toolbars.Draw.MULTI_POINT);map.hideZoomSlider();}">Multipoint(多点)</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){toolbar.activate(esri.toolbars.Draw.LINE);map.hideZoomSlider();}">Line(线)</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){toolbar.activate(esri.toolbars.Draw.POLYLINE);map.hideZoomSlider();}">Polyline(折线)</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){toolbar.activate(esri.toolbars.Draw.POLYGON);map.hideZoomSlider();}">Polygon(多边形)</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){toolbar.activate(esri.toolbars.Draw.FREEHAND_POLYLINE);map.hideZoomSlider();}">Freehand Polyline(手绘折线)</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){toolbar.activate(esri.toolbars.Draw.FREEHAND_POLYGON);map.hideZoomSlider();}">Freehand Polygon(手绘多边形)</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:drawLine">画线</button>
+        <br />
+        <span>符号绘制:</span>
+        <!-- 箭头,三角形,圆形和椭圆类型所有绘制的多边形符号 -->
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:drawArrow">箭头</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:drawTriangle">三角形</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:drawCircle">圆形</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:drawEllipse">椭圆</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:clearMap">清空</button>
+        <br />
+        <span>中英文地图切换:</span>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:getEngMap">获取英文地图</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:getChineseMap">获取中文地图</button>
+        <br />
+        <span>对话框弹出:</span>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:openWin">弹出对话框</button>
+        <button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:closeWin">取消弹出对话框</button>
+    </div>
+    <div id="map" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'">
+    </div>
+</div>
+</body>
+</html>

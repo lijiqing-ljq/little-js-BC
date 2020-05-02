@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>16-JavaScript-表单校验</title>
+</head>
+<body>
+<form action="http://www.it666.com">
+    <input type="text" placeholder="请输入账号" name="userName">
+    <input type="password" placeholder="请输入密码" name="userPwd">
+    <input type="submit" value="注册">
+</form>
+<script>
+    /*
+    需求:
+    1.账号和密码必须大于等于6位
+    2.如果账号密码的长度不够就改变input输入框的背景颜色
+    3.如果用户输入的账号或者密码不符合需求, 那么就不能提交
+    */
+    // 1.拿到需要操作的元素
+    let oUserName = document.querySelector("input[type=text]");
+    let oPassword = document.querySelector("input[type=password]");
+    let oSubmit = document.querySelector("input[type=submit]");
+    // 2.监听注册按钮的点击
+    oSubmit.onclick = function () {
+        // 1.拿到输入的用户名, 判断长度是否大于6位
+        // 注意点: 如果想获取input中输入的内容, 必须通过value属性来获取
+        // console.log(oUserName.innerHTML);
+        // console.log(oUserName.innerText);
+        // console.log(oUserName.textContent);
+//         console.log(typeof oUserName.value);
+        if(oUserName.value.length < 6){
+            oUserName.style.background = "red";
+            return  false;
+        }else{
+            oUserName.style.background = "#fff";
+        }
+        if(oPassword.value.length < 6){
+            oPassword.style.background = "red";
+            return  false;
+        }else{
+            oPassword.style.background = "#fff";
+        }
+    }
+</script>
+</body>
+</html>

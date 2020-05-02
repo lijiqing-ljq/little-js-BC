@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>12-JavaScript-简易轮播图</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            width: 670px;
+            border: 1px solid #000;
+            margin: 100px auto;
+            position: relative;
+        }
+        div>img{
+            vertical-align: bottom;
+        }
+        p{
+            position: absolute;
+            width: 100%;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+        }
+        p>span{
+            display: inline-block;
+            width: 30px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            font-size: 40px;
+            color: #fff;
+            background: rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+<div>
+    <img src="images/ad1.jpg" alt="">
+    <p>
+        <span id="pre">&lt;</span>
+        <span id="next">&gt;</span>
+    </p>
+</div>
+<script>
+    // 1.获取到需要操作的元素
+    let oImg = document.querySelector("img");
+    let preBtn = document.querySelector("#pre");
+    let nextBtn = document.querySelector("#next");
+    // 2.定义数组保存所有需要展示的图片
+    // 注意点: 在企业开发中都是通过网络请求去服务器上获取
+    let images = [
+        "images/ad1.jpg",
+        "images/ad2.jpg",
+        "images/ad3.jpg",
+        "images/ad4.jpg",
+        "images/ad5.jpg",
+    ];
+    let currentIndex = 0;
+    let maxIndex = images.length - 1;
+    // 3.监听按钮的点击事件
+    preBtn.onclick = function () {
+        currentIndex--;
+        if(currentIndex < 0){
+            currentIndex = maxIndex;
+        }
+        oImg.src = images[currentIndex];
+    }
+    nextBtn.onclick = function () {
+        currentIndex++;
+        if(currentIndex > maxIndex){
+            currentIndex = 0;
+        }
+        oImg.src = images[currentIndex];
+    }
+</script>
+</body>
+</html>

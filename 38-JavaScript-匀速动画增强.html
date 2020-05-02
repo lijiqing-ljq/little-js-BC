@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>38-JavaScript-匀速动画增强</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box{
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+        .line1, .line2{
+            width: 500px;
+            height: 20px;
+            background: blue;
+        }
+        .line2{
+            width: 200px;
+            background: purple;
+        }
+    </style>
+</head>
+<body>
+<button id="start1">开始到500</button>
+<button id="start2">开始到200</button>
+<button id="end">结束</button>
+<div class="box"></div>
+<div class="line1"></div>
+<div class="line2"></div>
+<script>
+    // 1.拿到需要操作的元素
+    let startBtn1 = document.querySelector("#start1");
+    let startBtn2 = document.querySelector("#start2");
+    let endBtn = document.querySelector("#end");
+    let oDiv = document.querySelector(".box");
+    let timerId = null;
+
+    // 2.监听按钮的点击事件
+    endBtn.onclick = function () {
+        clearInterval(timerId);
+    }
+    startBtn1.onclick = function () {
+        // linearAnimation(oDiv, "marginTop", 500);
+        // linearAnimation(oDiv, {"marginTop":500});
+        // linearAnimation(oDiv, {"marginTop":500, "marginLeft": 300}, function () {
+        //     alert("动画执行完毕之后执行的其它的操作");
+        // });
+        linearAnimation(oDiv, {"marginTop":500, "marginLeft": 300});
+    }
+    startBtn2.onclick = function () {
+        linearAnimation(oDiv, 200);
+    }
+    // function linearAnimation(ele, attr ,target) {
+    function linearAnimation(ele, obj, fn) {
+        clearInterval(timerId);
+        timerId = setInterval(function () {
+            // flag变量用于标记是否所有的属性都执行完了动画
+            let flag = true;
+            for(let key in obj){
+                let attr = key;
+                let target = obj[key];
+
+                // 1.拿到元素当前的位置
+                // let begin = parseInt(ele.style.width) || 0;
+                let style = getComputedStyle(ele);
+                // let begin = parseInt(style.width) || 0;
+                let begin = parseInt(style[attr]) || 0;
+                // 2.定义变量记录步长
+                let step = (begin - target) > 0 ? -13 : 13;
+                // 3.计算新的位置
+                begin += step;
+                if(Math.abs(target - begin) > Math.abs(step)){
+                    flag = false;
+                }else{
+                    begin = target;
+                }
+                // 4.重新设置元素的位置
+                // ele.style.width = begin + "px";
+                ele.style[attr] = begin + "px";
+            }
+            if(flag){
+                clearInterval(timerId);
+                // if(fn){
+                //     fn();
+                // }
+                fn && fn();
+            }
+        }, 100);
+    }
+</script>
+</body>
+</html>

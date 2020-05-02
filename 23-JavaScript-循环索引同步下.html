@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>23-JavaScript-循环索引同步下</title>
+</head>
+<body>
+<button>我是按钮1</button>
+<button>我是按钮2</button>
+<button>我是按钮3</button>
+<script>
+    /*
+    在ES6中如果在循环中通过let定义的变量, 那么这个变量是一个局部变量
+    */
+    /*
+    var list = [];
+    // 这里的i是全局变量
+    for(var i = 0; i < 3; i++){ // 0 1 2 3
+        var fn = function test() {
+            console.log(i); // 3
+        }
+        list.push(fn);
+    }
+    // console.log(i);
+    // console.log(list);
+    list[0]();
+    list[1]();
+    list[2]();
+    */
+
+    /*
+    let list = [];
+    // 这里的i是局部变量
+    // 注意点: 由于i是局部变量, 所以每次执行完循环体都会重新定义一个i变量
+    for(let i = 0; i < 3; i++){ // 0 1 2 3
+        let fn = function test() {
+            console.log(i); // 3
+        }
+        list.push(fn);
+    }
+    // console.log(i); // i is not defined
+    // console.log(list);
+    list[0]();
+    list[1]();
+    list[2]();
+    */
+    for(let i = 0; i < 3; i++){ // 0 1 2 3
+        // 注意点: 在ES6中由于{}是块级作用域, 所以只要在块级作用域中定义了一个函数
+        //         并且这个函数中用到了块级作用域中的数据, 那么这个函数就是闭包
+        function test() {
+            console.log(i); // 3
+        }
+    }
+    test(); // 2
+</script>
+</body>
+</html>

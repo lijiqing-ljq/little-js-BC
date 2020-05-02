@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>31-JavaScript-时钟效果</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .clock{
+            width: 300px;
+            height: 600px;
+            margin: 0 auto;
+            background: url("images/clock.png");
+            position: relative;
+        }
+        .clock>.box{
+            width: 120px;
+            height: 120px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 220px;
+        }
+        .hour, .minute, .second{
+            width: 6px;
+            height: 120px;
+            background: url("images/hour.png");
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .minute{
+            background: url("images/minute.png");
+        }
+        .second{
+            background: url("images/second.png");
+        }
+    </style>
+</head>
+<body>
+<div class="clock">
+    <div class="box">
+        <div class="hour"></div>
+        <div class="minute"></div>
+        <div class="second"></div>
+    </div>
+</div>
+<script>
+    // 1.获取到需要操作的元素
+    let oHour = document.querySelector(".hour");
+    let oMinute = document.querySelector(".minute");
+    let oSecond = document.querySelector(".second");
+
+    setTime();
+    setInterval(function () {
+        setTime();
+    }, 1000);
+
+    function setTime() {
+        // 2.获取到当前的时间
+        let date = new Date();
+        // 3.根据当前的时间设置时针分针秒针旋转的角度
+        oHour.style.transform = `rotate(${(date.getHours() + date.getMinutes()/60 + date.getSeconds()/3600) * 30}deg)`;
+        oMinute.style.transform = `rotate(${(date.getMinutes() + date.getSeconds()/60) * 6}deg)`;
+        oSecond.style.transform = `rotate(${date.getSeconds() * 6}deg)`;
+    }
+</script>
+</body>
+</html>

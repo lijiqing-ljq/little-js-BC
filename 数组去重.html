@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+			var arr = [12, '12', '32', '89', '12', '12', '78', '12', '32', {
+					name: 1
+				}, {
+					"ljq": true
+				},
+				{
+					name: 1
+				},
+				[1, 1, 2, "2"],
+				[1, 1, 2, "2"],
+				[1, 1, 2, 2],
+				function f() {
+					console.log(1);
+				},
+				function e() {
+					console.log(1);
+				},
+				function d() {
+					console.log(2);
+				}
+			];
+			// 速度最快， 占空间最多（空间换时间）
+			function unique2(array) {
+				var n = {},
+					r = [],
+					type;
+				for(var i = 0; i < array.length; i++) {
+					type = typeof array[i];
+					console.log(type);
+
+					if(!n[array[i]]) {
+
+						n[array[i]] = [type];
+						console.log(n[array[i]], n);
+
+						r.push(array[i]);
+						console.log(r);
+
+					} else if(n[array[i]].indexOf(type) < 0) {
+
+						n[array[i]].push(type);
+						console.log(n[array[i]], n);
+
+						r.push(array[i]);
+						console.log(r)
+					}
+				}
+				return r;
+			}
+			arr = unique2(arr);
+			console.log(arr);
+			console.log([1, 1, 2, "2"].toString() === [1, 1, 2, 2].toString(), [1, 1, 2, "2"].toString());
+			let a = new Object();
+			console.log({}.__proto__,
+				a.__proto__,
+				Array.isArray([].__proto__), {}.__proto__ === [].__proto__.__proto__,
+				null == null, null === null,
+				undefined == undefined, undefined === undefined,
+				null == undefined, null === undefined);
+			var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false,
+				undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}
+			];
+			console.log(arr);
+			console.log(arr, arr.sort(), arr);
+
+			function unique(arr) {
+				var obj = {};
+				return arr.filter(function(item, index, arr) {
+					console.log((typeof item + item),obj.hasOwnProperty(typeof item + item))
+					return obj.hasOwnProperty(typeof item + item) ? false : (obj[typeof item + item] = true)
+				})
+			}
+			var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false,
+				undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}
+			];
+			console.log(unique(arr))
+			//[1, "true", true, 15, false, undefined, null, NaN, "NaN", 0, "a", {…}]   //所有的都去重了
+		</script>
+	</body>
+
+</html>

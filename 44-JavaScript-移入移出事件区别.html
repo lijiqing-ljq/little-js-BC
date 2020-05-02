@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>44-JavaScript-移入移出事件区别</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .father{
+            width: 300px;
+            height: 300px;
+            background: red;
+        }
+        .son{
+            width: 150px;
+            height: 150px;
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+<div class="father">
+    <div class="son"></div>
+</div>
+<script>
+    /*
+    1.onmouseover和onmouseenter的区别
+    onmouseover移入到子元素,父元素的移入事件也会被触发
+    onmouseenter移入到子元素,父元素的移入事件不会被触发
+    */
+    /*
+    2.onmouseout和onmouseleave的区别
+    onmouseout移出到子元素,父元素的移入事件也会被触发
+    onmouseleave移出到子元素,父元素的移入事件不会被触发
+    */
+    let oFDiv = document.querySelector(".father");
+    let oSDiv = document.querySelector(".son");
+    /*
+    oFDiv.onmouseover = function () {
+        console.log("father");
+    }
+    oSDiv.onmouseover = function () {
+        console.log("son");
+    }
+     */
+    /*
+    oFDiv.onmouseenter = function () {
+        console.log("father");
+    }
+    oSDiv.onmouseenter = function () {
+        console.log("son");
+    }
+     */
+    oFDiv.onmouseleave = function () {
+        console.log("father");
+    }
+    oSDiv.onmouseleave = function () {
+        console.log("son");
+    }
+</script>
+</body>
+</html>

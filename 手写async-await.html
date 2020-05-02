@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+			//			// 定义了一个promise，用来模拟异步请求，作用是传入参数++
+			//			function getNum(num) {
+			//				return new Promise((resolve, reject) => {
+			//					setTimeout(() => {
+			//						resolve(num + 1)
+			//					}, 1000)
+			//				})
+			//			}
+			//
+			//			//自动执行器，如果一个Generator函数没有执行完，则递归调用
+			//			function asyncFun(func) {
+			//				var gen = func();
+			//				console.log(gen);
+			//
+			//				function next(data) {
+			//					var result = gen.next(data);
+			//					if(result.done) return result.value;
+			//					result.value.then(function(data) {
+			//						next(data);
+			//					});
+			//				}
+			//
+			//				next();
+			//			}
+			//
+			//			// 所需要执行的Generator函数，内部的数据在执行完成一步的promise之后，再调用下一步
+			//			var func = function*() {
+			//				var f1 = yield getNum(1);
+			//				var f2 = yield getNum(f1);
+			//				console.log(f2);
+			//				return f2;
+			//			};
+			//			asyncFun(func);
+
+			//function asyncToGenerator(generatorFunc) { // 返回的是一个新的函数 return function() { // 先调用generator函数 生成迭代器 // 对应 var gen = testG() const gen = generatorFunc.apply(this, arguments) // 返回一个promise 因为外部是用.then的方式 或者await的方式去使用这个函数的返回值的 // var test = asyncToGenerator(testG)
+			// test().then(res => console.log(res)) return new Promise((resolve, reject) => { // 内部定义一个step函数 用来一步一步的跨过yield的阻碍 // key有next和throw两种取值，分别对应了gen的next和throw方法 // arg参数则是用来把promise resolve出来的值交给下一个yield function step(key, arg) { let generatorResult // 这个方法需要包裹在try catch中 // 如果报错了 就把promise给reject掉 外部通过.catch可以获取到错误 try { generatorResult = gen[key](arg) } catch (error) { return reject(error) }// gen.next() 得到的结果是一个 { value, done } 的结构 const { value, done } = generatorResult if (done) { // 如果已经完成了 就直接resolve这个promise // 这个done是在最后一次调用next后才会为true // 以本文的例子来说 此时的结果是 { done: true, value: 'success' } // 这个value也就是generator函数最后的返回值 return resolve(value) } else { // 除了最后结束的时候外，每次调用gen.next() // 其实是返回 { value: Promise, done: false } 的结构， // 这里要注意的是Promise.resolve可以接受一个promise为参数 // 并且这个promise参数被resolve的时候，这个then才会被调用 return Promise.resolve( // 这个value对应的是yield后面的promise value ).then( // value这个promise被resove的时候，就会执行next // 并且只要done不是true的时候 就会递归的往下解开promise // 对应gen.next().value.then(value => { // gen.next(value).value.then(value2 => { // gen.next() //// // 此时done为true了 整个promise被resolve了 // // 最外部的test().then(res => console.log(res))的then就开始执行 了 // }) // }) function onResolve(val) { step("next", val) },// 如果promise被reject了 就再次进入step函数 // 不同的是，这次的try catch中调用的是gen.throw(err) // 那么自然就被catch到 然后把promise给reject掉啦 function onReject(err) { step("throw", err) }, ) } }
+			//57. 什么是回流，什么是重绘，有什么区别？
+			//当render tree中的一部分(或全部)因为元素的规模尺寸，布局，隐藏等改变而需要重新构建。这
+			//就称为回流(reflow)
+			//当render tree中的一些元素需要更新属性，而这些属性只是影响元素的外观，风格，而不会影响
+			//布局的，比如background-color。则就叫称为重绘
+			//区别：
+			//回流必将引起重绘，而重绘不一定会引起回流。比如：只有颜色改变的时候就只会发生重绘而不
+			//会引起回流 当页面布局和几何属性改变时就需要回流 比如：添加或者删除可见的DOM元素，元
+			//素位置改变，元素尺寸改变——边距、填充、边框、宽度和高度，内容改变
+			//58. 怎么做性能优化
+			//1、JavaScript外联文件引用放在html文档底部；CSS外联文件引用在html文档头部，位于head
+			//内；
+			//2、http静态资源尽量用多个子域名；
+			//3、服务器端提供html文档和http静态资源时，尽量开启gzip压缩；
+			//4、尽量减少HTTP Requests的数量；
+			//5、使用雪碧图来减少CSS背景图片的HTTP请求次数；
+			//6、首屏不需要展示的较大尺寸图片，请使用lazyload； 7、图片无损压缩的优化；
+			//8、减少cookies的大小：尽量减少cookies的体积对减少用户获得响应的时间十分重要；
+			//9、引入textarea/script元素做延迟解析异步渲染
+			//59. vue有什么生命周期？在new Vue 到 vm.$destory的过程经历了什么？
+			//生命周期：
+			//初始化阶段：beforeCreate和create
+			//挂载阶段：beforeMount和mounted
+			//更新阶段：beforeUpdate和update
+			//卸载阶段：beforeDestory和destory
+			//过程
+			//当 new Vue() 后，首先会初始化事和生命周期，接着会执行beforeCreate生命周期钩子 ，在这 个钩子里面还拿不到 this.$el 和 this.$data`;
+			//接着往下走会初始化inject和将data的数据进行侦测也就是进行双向绑定； step("next") }) } }
+			//			function sleep(wait) {
+			//				return new Promise((res, rej) => {
+			//					setTimeout(() => {
+			//						res(wait);
+			//					}, wait);
+			//				});
+			//			}
+			//
+			//			async function demo() {
+			//				let result01 = await sleep(100);
+			//				//上一个await执行之后才会执行下一句
+			//				let result02 = await sleep(result01 + 100);
+			//				let result03 = await sleep(result02 + 100);
+			//				// console.log(result03);
+			//				return result03;
+			//			}
+			//
+			//			demo().then(result => {
+			//				console.log(result);
+			//			});
+			// 定义了一个promise，用来模拟异步请求，作用是传入参数++
+//			function getNum(num) {
+//				return new Promise((resolve, reject) => {
+//					setTimeout(() => {
+//						console.log(num);
+//						resolve(num + 1)
+//					}, 2000)
+//				})
+//			}
+//
+//			//自动执行器，如果一个Generator函数没有执行完，则递归调用
+//			function asyncFun(func) {
+//				var gen = func();
+//
+//				function next(data) {
+//					var result = gen.next(data);
+//					console.log(10, result);
+//					if(result.done) return result.value;
+//					result.value.then(function(data) {
+//						next(data);
+//					});
+//
+//				}
+//
+//				next();
+//			}
+//
+//			// 所需要执行的Generator函数，内部的数据在执行完成一步的promise之后，再调用下一步
+//			var func = function*() {
+//				var f1 = yield getNum(1);
+//				var f2 = yield getNum(f1);
+//				var f3 = yield getNum(f2);
+//				console.log(20, f1, f2, f3);
+//			};
+//			asyncFun(func);
+
+			function* fib(x) {
+				let a = 1;
+				let b = 1;
+				let n = 0;
+				while(n < x) {
+					yield a;
+					[a, b] = [b, a + b];
+					console.log([a, b],a,b);
+					n++;
+				}
+				return b;
+			}
+			console.log(fib(5),fib(5).next());
+			for (var a of fib(5)) {
+				console.log(a);
+				
+			}
+		</script>
+
+	</body>
+
+</html>

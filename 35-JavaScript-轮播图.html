@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>35-JavaScript-轮播图</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box{
+            width: 670px;
+            height: 300px;
+            border: 1px solid #000;
+            margin: 100px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        ul{
+            list-style: none;
+            display: flex;
+        }
+        p{
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        p>span{
+            width: 30px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            font-size: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <ul>
+        <li><img src="images/ad1.jpg" alt=""></li>
+        <li><img src="images/ad2.jpg" alt=""></li>
+        <li><img src="images/ad3.jpg" alt=""></li>
+    </ul>
+    <p>
+        <span class="left">&lt;</span>
+        <span class="right">&gt;</span>
+    </p>
+</div>
+<script>
+    // 1.拿到需要操作的元素
+    let oLeft = document.querySelector(".left");
+    let oRight = document.querySelector(".right");
+    let oUl = document.querySelector("ul");
+    let oItems = document.querySelectorAll("ul>li");
+    let imgWidth = parseFloat(getComputedStyle(oItems[0]).width);
+    let currentIndex = 0;
+
+    // 2.监听按钮的点击
+    oRight.onclick = function () {
+        currentIndex++;
+        if(currentIndex > oItems.length - 1){
+            currentIndex = 0;
+        }
+        // oUl.style.marginLeft = -currentIndex * imgWidth + "px";
+        // linearAnimation(oUl, -currentIndex * imgWidth);
+        easeAnimation(oUl, -currentIndex * imgWidth);
+    }
+    oLeft.onclick = function () {
+        currentIndex--;
+        if(currentIndex < 0){
+            currentIndex = oItems.length - 1;
+        }
+        // oUl.style.marginLeft = -currentIndex * imgWidth + "px";
+        // linearAnimation(oUl, -currentIndex * imgWidth);
+        easeAnimation(oUl, -currentIndex * imgWidth);
+    }
+
+    let timerId = null;
+    function linearAnimation(ele, target) {
+        clearInterval(timerId);
+        timerId = setInterval(function () {
+            // 1.拿到元素当前的位置
+            let begin = parseInt(ele.style.marginLeft) || 0;
+            // 2.定义变量记录步长
+            //         0  -  500 = -500    13
+            //         500 -  200 = 300    -13
+            let step = (begin - target) > 0 ? -13 : 13;
+            // 3.计算新的位置
+            begin += step;
+            console.log(Math.abs(target - begin), Math.abs(step));
+            if(Math.abs(target - begin) <= Math.abs(step)){
+                clearInterval(timerId);
+                begin = target;
+            }
+
+            // 4.重新设置元素的位置
+            ele.style.marginLeft = begin + "px";
+        }, 100);
+    }
+    function easeAnimation(ele, target) {
+        clearInterval(timerId);
+        timerId = setInterval(function () {
+            // 1.拿到元素当前的位置
+            let begin = parseInt(ele.style.marginLeft) || 0;
+            // 2.定义变量记录步长
+            // 公式: (结束位置 - 开始位置) * 缓动系数(0 ~1)
+            let step = (target - begin) * 0.3;
+            console.log(step);
+            // 3.计算新的位置
+            begin += step;
+            if(Math.abs(Math.floor(step)) <= 1){
+                clearInterval(timerId);
+                begin = target;
+            }
+            // 4.重新设置元素的位置
+            ele.style.marginLeft = begin + "px";
+        }, 100);
+    }
+</script>
+</body>
+</html>

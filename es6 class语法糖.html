@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+						var Person = (function() {
+							function Person(name) {
+								this.name = name;
+							}
+			
+							Object.defineProperties(Person.prototype, {
+								'greet': {
+									value: function greet() {
+										console.log("Hi, my name is ".concat(this.name));
+									},
+									//enumerable: false
+									enumerable: true									
+								},
+								'greetDelay': {
+									value: function greetDelay(time) {
+										var _this = this;
+										setTimeout(function() {
+											console.log("Hi, my name is ".concat(_this.name));
+										}, time);
+									},
+									enumerable: false
+								}
+							});
+							return Person;
+						})();
+						var a = new Person("ljq");
+						for (var b in a) {
+							console.log(typeof a[b] === "function" ? a[b]() : a[b]); 
+							console.log(typeof a[b] === "function"); 
+						}
+						a.__proto__.greetDelay = 1;
+                        console.log(a.__proto__.greetDelay); 
+						
+						
+						
+			//			function setName(obj) {
+			//				obj = 'ot';
+			//			    console.log(obj === obj2.name); 
+			//				
+			//			};
+			//
+			//			var obj2 = new Object();
+			//			obj2.name = 2;
+			//			setName(obj2.name);
+			//			console.log(obj2.name); 
+			//
+			//			var c = 3;
+			//			function c(){
+			//				
+			//			}
+			//			console.log(c); //3
+//			setTimeout(() => {
+//
+//			})
+			//			
+//			const m1 = (ctx, next) => {
+//
+//				setTimeout(() => {
+//					ctx.req.user = null;
+//					console.log('中间件1 进入', ctx.req);
+//				},1000)
+//				next()
+//
+//				console.log('中间件1 退出', ctx.req);
+//			}
+//			const m2 = (ctx, next) => {
+//				setTimeout(() => {
+//					ctx.req.user = {
+//						id: 1
+//					};
+//					console.log('中间件2 进入');
+//				},1000)
+//
+//				next()
+//
+//				console.log('中间件2 退出');
+//			}
+//			const m3 = (ctx, next) => {
+//				setTimeout(() => {
+//					console.log('中间件3');
+//
+//				},1000)
+//
+//			}
+//			const middlewares = [m1, m2, m3];
+//			const context = {
+//				req: {},
+//				res: {}
+//			};
+//			let index = -1;
+//			function dispatch(i) {
+//				index = i;
+//				let fn = middlewares[i];
+//				if(i === middlewares.length) { fn = next;
+//				    console.log(fn,next);
+//				};
+//				if(!fn) return Promise.resolve()
+//				try {
+//					return Promise.resolve(fn(context, dispatch.bind(null, i + 1)));
+//				} catch(err) {
+//					return Promise.reject(err);
+//				}
+//			}
+//			let a = dispatch(0);
+//			console.log(a);
+            class d{
+            	b=1,          	
+            }
+            let c = new d;
+            console.log(c);
+		</script>
+	</body>
+
+</html>

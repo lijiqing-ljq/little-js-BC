@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>30-JavaScript-京东秒杀</title>
+    <link rel="stylesheet" href="fonts/iconfont.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box{
+            width: 190px;
+            height: 270px;
+            color: #fff;
+            margin: 100px auto;
+            background: #d00;
+            text-align: center;
+            padding-top: 40px;
+            box-sizing: border-box;
+        }
+        .box>h3{
+            font-size: 26px;
+        }
+        .box>p:nth-of-type(1){
+            margin-top: 5px;
+            color: rgba(255,255,255,0.5);
+        }
+        .box>i{
+            display: inline-block;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-size: 40px;
+        }
+        .box>.time{
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+        }
+        .time>div{
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-weight: bold;
+            background: #333;
+            position: relative;
+        }
+        .time>.minute{
+            margin: 0 10px;
+        }
+        .time>div::before{
+            content: "";
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: #d00;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <h3>京东秒杀</h3>
+    <p>FLASH DEALS</p>
+    <i class="iconfont icon-lightningbshandian"></i>
+    <p>本场距离结束还剩</p>
+    <div class="time">
+        <div class="hour">00</div>
+        <div class="minute">00</div>
+        <div class="second">00</div>
+    </div>
+</div>
+<script>
+    // 1.获取到需要操作的元素
+    let oHour = document.querySelector(".hour");
+    let oMinute = document.querySelector(".minute");
+    let oSecond = document.querySelector(".second");
+
+    // 2.获取时间的差值
+    let remDate = new Date("2019-11-20 15:00:00");
+    setTime(remDate);
+
+    // 3.将差值设置给元素
+    setInterval(function () {
+        setTime(remDate);
+    }, 1000);
+
+    function setTime(remDate) {
+        let obj = getDifferTime(remDate);
+        // console.log(obj);
+        oHour.innerText = obj.hour;
+        oMinute.innerText = obj.minute;
+        oSecond.innerText = obj.second;
+    }
+    function getDifferTime(remDate, curDate = new Date()) {
+        // 1.得到两个时间之间的差值(毫秒)
+        let differTime = remDate - curDate;
+        // let differTime = remDate.valueOf() - curDate.valueOf();
+        // 2.得到两个时间之间的差值(秒)
+        let differSecond = differTime / 1000;
+        // 3.利用相差的总秒数 / 每一天的秒数 = 相差的天数
+        let day = Math.floor(differSecond / (60 * 60 * 24));
+        day = day >= 10 ? day : "0" + day;
+        // 4.利用相差的总秒数 / 小时 % 24;
+        let hour = Math.floor(differSecond / (60 * 60) % 24);
+        hour = hour >= 10 ? hour : "0" + hour;
+        // 5.利用相差的总秒数 / 分钟 % 60;
+        let minute = Math.floor(differSecond / 60 % 60);
+        minute = minute >= 10 ? minute : "0" + minute;
+        // 6.利用相差的总秒数 % 秒数
+        let second = Math.floor(differSecond % 60);
+        second = second >= 10 ? second : "0" + second;
+        return {
+            day: day,
+            hour: hour,
+            minute: minute,
+            second: second,
+        }
+    }
+</script>
+</body>
+</html>

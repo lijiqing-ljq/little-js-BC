@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>46-JavaScript-佩奇跟我走</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html, body{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<img src="images/pig.gif" alt="">
+<script>
+    /*
+    let oImg = document.querySelector("img");
+    let style = getComputedStyle(oImg);
+    document.body.onmousemove = function (event) {
+        event = event || window.event;
+        // console.log(event.clientX);
+        // console.log(event.clientY);
+        // oImg.style.marginLeft = event.clientX - parseFloat(style.width) / 2 + "px";
+        // oImg.style.marginTop = event.clientY - parseFloat(style.height) / 2 + "px";
+
+        oImg.style.marginLeft = event.pageX - parseFloat(style.width) / 2 + "px";
+        oImg.style.marginTop = event.pageY - parseFloat(style.height) / 2 + "px";
+    }
+     */
+    document.body.onmousemove = function (event) {
+        event = event || window.event;
+        // 注意点: clientX/clientY无论高级浏览器还是低级浏览器都支持
+        //         pageX/pageY只有高级浏览器支持, 低级浏览器是不支持的(IE9以下)
+        // console.log(event.clientX);
+        // console.log(event.clientY);
+        console.log(event.pageX);
+        console.log(event.pageY);
+    }
+</script>
+</body>
+</html>

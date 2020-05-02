@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>66-JavaScript-返回顶部</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        img{
+            width: 100%;
+            vertical-align: top;
+        }
+        span{
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background: red;
+            position: fixed;
+            right: 10px;
+            bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<img src="images/nba-top.jpg" alt="" id="top">
+<img src="images/nba-nav.jpg" alt="" id="nav">
+<img src="images/nba-body.jpg" alt="">
+<span>TOP</span>
+<script src="js/tools.js"></script>
+<script>
+    // 1.拿到需要操作的元素
+    let oBackBtn = document.querySelector("span");
+    // 2.监听网页的滚动
+    window.onscroll = function () {
+        // 获取滚动出去的距离
+        let offsetY = getPageScroll().y;
+        // 判断是否需要显示回滚按钮
+        if(offsetY >= 200){
+            oBackBtn.style.display = "block";
+        }else{
+            oBackBtn.style.display = "none";
+        }
+    }
+    let timerId = null;
+    // 3.监听回滚按钮的点击
+    oBackBtn.onclick = function () {
+        clearInterval(timerId);
+        timerId = setInterval(function () {
+            let begin = getPageScroll().y;
+            let target = 0;
+            let step = (target - begin) * 0.3;
+            begin += step;
+            if(Math.abs(Math.floor(step)) <= 1){
+                clearInterval(timerId);
+                window.scrollTo(0, 0);
+                return;
+            }
+            window.scrollTo(0, begin);
+        }, 50);
+        // window.scrollTo(x, y);
+        // x表示让网页在水平方向滚动到什么位置
+        // y表示让网页在垂直方向滚动到什么位置
+    }
+</script>
+</body>
+</html>

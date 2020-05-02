@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>26-JavaScript-Tab选项卡面向对象版</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #tab{
+            width: 400px;
+            height: 300px;
+            border: 1px solid #000;
+            margin: 100px auto;
+        }
+        #tab_top{
+            list-style: none;
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+        }
+        #tab_top>li{
+            width: 80px;
+            height: 100%;
+            background: skyblue;
+            border-right: 1px solid #ccc;
+        }
+        #tab_top>li:last-child{
+            border-right: none;
+        }
+        #tab_bottom{
+            width: 100%;
+            height: 250px;
+        }
+        #tab_bottom>.tab-content{
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+        .selected{
+            background: red !important;
+        }
+    </style>
+</head>
+<body>
+<!--
+在前端开发中如果id名称是由多个单词组成的, 那么建议使用下划线来连接
+在前端开发中如果class名称是由多个单词组成的, 那么建议使用中划线来连接
+-->
+<div id="tab">
+    <ul id="tab_top">
+        <li class="tab-item selected">新闻</li>
+        <li class="tab-item">视频</li>
+        <li class="tab-item">音乐</li>
+        <li class="tab-item">军事</li>
+        <li class="tab-item">财经</li>
+    </ul>
+    <div id="tab_bottom">
+        <div class="tab-content">新闻的内容</div>
+        <div class="tab-content">视频的内容</div>
+        <div class="tab-content">音乐的内容</div>
+        <div class="tab-content">军事的内容</div>
+        <div class="tab-content">财经的内容</div>
+    </div>
+</div>
+<script>
+    class Tab{
+        constructor(){
+            this.oTabItems = document.querySelectorAll(".tab-item");
+            this.oTabContents = document.querySelectorAll(".tab-content");
+            this.oTabContents[0].style.display = "block";
+            this.previousIndex = 0;
+        }
+        addClickEvent(){
+            for(let i = 0; i < this.oTabItems.length; i++){
+                let tabItem = this.oTabItems[i];
+                tabItem.onclick = () => {
+                    this._change(i);
+                }
+            }
+        }
+        addMoveEvent(){
+            for(let i = 0; i < this.oTabItems.length; i++){
+                let tabItem = this.oTabItems[i];
+                tabItem.onmousemove = () => {
+                    this._change(i);
+                }
+            }
+        }
+        /*如果在方法名称前面加上_, 代表告诉其他的程序员这个是一个私有的方法, 不要调用
+        * 注意点: 仅仅是告诉别人这个是一个私有的方法, 并不是真正的是一个私有的方法*/
+        _change(i){
+            // 1.排它
+            let preTabItem = this.oTabItems[this.previousIndex];
+            preTabItem.className = preTabItem.className.replace("selected", "");
+            let preTabContent = this.oTabContents[this.previousIndex];
+            preTabContent.style.display = "none";
+
+            // 2.设置当前的样式
+            let curTabItem = this.oTabItems[i];
+            curTabItem.className = curTabItem.className + " selected";
+            let curTabContent = this.oTabContents[i];
+            curTabContent.style.display = "block";
+
+            // 3.保存当前的索引
+            this.previousIndex = i;
+        }
+    }
+    let tab = new Tab();
+    tab.addClickEvent();
+    // tab.addMoveEvent();
+</script>
+</body>
+</html>

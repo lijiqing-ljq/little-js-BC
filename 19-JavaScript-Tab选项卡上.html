@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>19-JavaScript-Tab选项卡</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box{
+            width: 400px;
+            height: 300px;
+            border: 1px solid #000;
+            margin: 100px auto;
+        }
+        .top{
+            list-style: none;
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+        }
+        .top>li{
+            width: 80px;
+            height: 100%;
+            background: skyblue;
+            border-right: 1px solid #ccc;
+        }
+        .top>li:last-child{
+            border-right: none;
+        }
+        .bottom{
+            width: 100%;
+            height: 250px;
+        }
+        .bottom>.content{
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+        .bottom>.content:nth-child(1){
+            background: red;
+            display: block;
+        }
+        .bottom>.content:nth-child(2){
+            background: blue;
+        }
+        .bottom>.content:nth-child(3){
+            background: green;
+        }
+        .bottom>.content:nth-child(4){
+            background: yellow;
+        }
+        .bottom>.content:nth-child(5){
+            background: purple;
+        }
+        .current{
+            background: red !important;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <ul class="top">
+        <li class="current" index="0">新闻</li>
+        <li index="1">视频</li>
+        <li index="2">音乐</li>
+        <li index="3">军事</li>
+        <li index="4">财经</li>
+    </ul>
+    <div class="bottom">
+        <div class="content">新闻的内容</div>
+        <div class="content">视频的内容</div>
+        <div class="content">音乐的内容</div>
+        <div class="content">军事的内容</div>
+        <div class="content">财经的内容</div>
+    </div>
+</div>
+<script>
+    // 1.拿到需要操作的元素
+    let oItems = document.querySelectorAll("li");
+    let oDivs = document.querySelectorAll(".content");
+    // 2.给所有的选项卡添加点击事件
+    for(let item of oItems){
+        item.onclick = change;
+    }
+
+    // 定义变量保存上一次设置的索引
+    let previousIndex = 0;
+    function change() {
+        // 清空上一次对应的元素对应的样式
+        let preItem = oItems[previousIndex];
+        preItem.className = "";
+        let preDiv = oDivs[previousIndex];
+        preDiv.style.display = "none";
+
+        // 设置当前这一次的元素对应的样式
+        let index = this.getAttribute("index");
+        let item = oItems[index];
+        item.className = "current";
+        // console.log(index);
+        let oDiv = oDivs[index];
+        oDiv.style.display = "block";
+
+        // 保存当前这一次的索引
+        previousIndex = index;
+    }
+</script>
+</body>
+</html>
