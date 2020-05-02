@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+//			冒泡排序（将小的数字如同气泡一样慢慢的浮上表面）    从小到大
+
+			//1.0 伪冒泡排序
+			function BubbleSort(arr) {
+				var i, j, temp;
+				for(i = 0; i < arr.length - 1; i++) {
+					for(j = i + 1; j < arr.length; j++) {
+						if(arr[i] > arr[j]) {
+							temp = arr[j];
+							arr[j] = arr[i];
+							arr[i] = temp;
+						}
+					}
+				}
+				return arr;
+			}
+			var arr = [10, 7, 9, 11, 22, 33, 4, 2, 0, 1000];
+			BubbleSort(arr);
+			console.log(arr); //[0, 2, 4, 7, 9, 10, 11, 22, 33, 1000]
+
+			//2.0 冒泡排序
+			function BubbleSort(arr) {
+				var i, j, temp;
+				for(i = 0; i < arr.length - 1; i++) {
+					for(j = arr.length - 1; j > i; j--) {
+						if(arr[j] < arr[j - 1]) { //j为从后往前循环
+							temp = arr[j - 1];
+							arr[j - 1] = arr[j];
+							arr[j] = temp;
+						}
+					}
+				}
+				return arr;
+			}
+			var arr = [10, 7, 9, 11, 22, 33, 4, 2, 0, 1000];
+			BubbleSort(arr);
+			console.log(arr); // [0, 2, 4, 7, 9, 10, 11, 22, 33, 1000]
+
+			//3.0 进一步优化
+			function BubbleSort(arr) {
+				var i, j, temp;
+				var flag = true; //flag进行标记
+				for(i = 0; i < arr.length - 1 && flag; i++) { //若flag为false则退出循环
+					flag = false; //初始化为false
+					for(j = arr.length - 1; j > i; j--) {
+						if(arr[j] < arr[j - 1]) { //j为从前往后循环
+							temp = arr[j - 1];
+							arr[j - 1] = arr[j];
+							arr[j] = temp;
+							flag = true; //如果有数据交换则为true
+						}
+					}
+				}
+				return arr;
+			}
+			var arr = [10, 7, 9, 11, 22, 33, 4, 2, 0, 1000];
+			BubbleSort(arr);
+			console.log(arr); // [0, 2, 4, 7, 9, 10, 11, 22, 33, 1000]
+			
+//			快速排序
+
+//          1.0
+			function quickSort(arr, low, high) {
+				var key = arr[low];
+				var start = low;
+				var end = high;
+				while(end > start) {
+					while(end > start && arr[end] >= key) end--;
+					if(arr[end] <=
+						key) {
+						var temp = a rr[end];
+						arr[end] = arr[start];
+						arr[start] = t emp;
+					}
+					while(end > start && arr[start] <=
+						key) start++;
+					if(arr[start] >= key) {
+						var temp = arr[start];
+						arr[start] = arr[end];
+						arr[end] = temp;
+					}
+				}
+				if(start > low) quickSort(arr, low, start - 1);
+				if(end <
+					high) quickSort(arr, end + 1, high);
+			}
+			var arr = [12, 20, 5, 16, 15, 1, 30, 45, 23, 9];
+			var start = 0;
+			var end = a rr.length - 1;
+			quickSort(arr, start, end);
+			console.log('After arr:' + arr); //[1,5,9,12,,15,16,20,23,30,45]
+			
+//			2.0
+            function quickSort(arr) {
+            	if(arr.length < 1) {
+            		return arr;
+            	}
+            	var pivotIndex = Math.floor(arr.length / 2); //找到那个基准数
+            	var pivot = arr.splice(pivotIndex, 1)[0]; //取出基准数，并去除，splice返回值为数组。
+            	var left = [];
+            	var right = [];
+            	for(var i = 0; i < arr.length; i++) {
+            		if(arr[i] < pivot) {
+            			left.push(arr[i]);
+            		} else {
+            			right.push(arr[i]);
+            		}
+            	}
+            	return quickSort(left).concat([pivot], quickSort(right)); //加入基准数
+            }
+            arr = [2, 1, 5, 8, 3, 7, 4, 6, 9];
+            console.log(quickSort(arr)); //[1, 2, 3, 4, 5, 6, 7, 8, 9]	   
+            
+        </script>
+	</body>
+
+</html>
