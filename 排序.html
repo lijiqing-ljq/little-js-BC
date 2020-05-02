@@ -78,9 +78,9 @@
 					while(end > start && arr[end] >= key) end--;
 					if(arr[end] <=
 						key) {
-						var temp = a rr[end];
+						var temp = arr[end];
 						arr[end] = arr[start];
-						arr[start] = t emp;
+						arr[start] = temp;
 					}
 					while(end > start && arr[start] <=
 						key) start++;
@@ -96,13 +96,13 @@
 			}
 			var arr = [12, 20, 5, 16, 15, 1, 30, 45, 23, 9];
 			var start = 0;
-			var end = a rr.length - 1;
+			var end = arr.length - 1;
 			quickSort(arr, start, end);
 			console.log('After arr:' + arr); //[1,5,9,12,,15,16,20,23,30,45]
 			
 //			2.0
             function quickSort(arr) {
-            	if(arr.length < 1) {
+            	if(arr.length <= 1) {
             		return arr;
             	}
             	var pivotIndex = Math.floor(arr.length / 2); //找到那个基准数
