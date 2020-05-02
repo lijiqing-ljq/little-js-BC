@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="app">
+    {{ message }}
+    <div>
+        <p>姓名:{{ name }}，年龄: {{age}}</p>
+        <p v-html="htmlData"></p>
+        <input type="text" v-model="modelData" />
+        <p>{{modelData}}</p>
+    </div>
+    就是一段纯文本
+</div>     
+<script>  
+class Event { 
+    events = {} // 事件池记录所有的相关事件及处理函数
+    on(eventName,fn){
+        if(!this.events[eventName]){
+            this.events[eventName] = [];
+        }
+        this.events[eventName].push(fn);
+    }
+    off(eventName,fn){ // 删除一个事件处理 eventName 事件名称 fn 对应的处理函数
+        if(!this.events[eventName]){
+            return ;
+        }
+        this.events[eventName] = this.events[eventName].filter(item=>item!=fn);
+    }
+    /*
+        dispatch 负责把触发到的事件给执行了
+    */
+    dispatch(eventName){
+        if(!this.events[eventName]){
+            return ;
+        }
+        this.events[eventName].forEach(item => {
+            item.call(this);
+        });
+    }
+}  
+class KVue extends Event {
+    constructor(option){
+        super();
+        this.$option = option;
+        let el = document.querySelector(option.el);
+        this.compileNode(el);  
+        this.observe(option.data);
+    }
+    // 给数据添加数据劫持
+    observe(data){  
+        let _this = this; 
+        this.$option.data = new Proxy(data,{
+            get(target,key){
+               return target[key]; 
+            },
+            set(target,key,newVal){  
+                target[key] = newVal;
+                _this.dispatch(key);
+                return true;
+            }
+        });
+    }
+    // // 完成数据劫持，在数据修改时去触发视图的变化
+    // dataProxy(data,key,value){ 
+    //     let _this = this;
+    //     Object.defineProperty(data,key,{
+    //         configurable: true,
+    //         enumerable: true,
+    //         set(newVal){
+    //             value = newVal;
+    //             _this.dispatch(key);
+    //             //console.log("数据已经修改了该触发视图的修改了",key);
+    //         },
+    //         get(){
+    //             return value;
+    //         }
+    //     });
+    // }
+    // 根据当前元素的结构，将我们的数据编译进去
+    compileNode(el){
+        let child = el.childNodes; // 找到元素下的所有节点
+        child.forEach(node => {
+            if(node.nodeType == 1){ // 如果该节点是元素节点
+                let attrs = node.attributes;
+                [...attrs].forEach(attr=>{
+                    let attrName = attr.name;
+                    if(attrName.indexOf("v-") == 0){
+                        let attrVal = attr.value;
+                        //console.log(attrName,attrVal);
+                        if(attrName === "v-html" ){ // 这是一个v-html指令，我们应该用数据替换该元素的内容
+                            node.innerHTML = this.$option.data[attrVal];
+                            this.on(attrVal,()=>{
+                               // console.log(attrVal,"进行了修改");
+                               node.innerHTML = this.$option.data[attrVal];
+                            })
+                        } else if(attrName == "v-model"){ // 这是一个双向绑定指令
+                            node.value = this.$option.data[attrVal];
+                            this.on(attrVal,()=>{
+                               // console.log(attrVal,"进行了修改");
+                               console.log(1);
+                               node.value = this.$option.data[attrVal];
+                            })
+                            // 监听视图发生了变化，同步修改我们的数据
+                            node.addEventListener("input",({target})=>{
+                                this.$option.data[attrVal] = target.value;
+                            });
+                        }
+                    }
+                });
+
+               if(node.childNodes.length > 0){ // 如果该元素还有子元素继续想要查找  
+                    this.compileNode(node);  
+               }
+            } else if(node.nodeType == 3){ // 如果该节点是文本节点
+                // console.log(node);
+                //console.dir(node);
+                let startContent = node.textContent;
+                let reg = /\{\{\s*(\S+)\s*\}\}/g;
+                //console.log(reg.test(startContent),startContent);
+                if(reg.test(startContent)){
+                    node.textContent = startContent.replace(reg,(...arg)=>{
+                        //console.log(arg[1]);
+                        this.on(arg[1],()=>{
+                            node.textContent = startContent.replace(reg,(...arg)=>{
+                                return this.$option.data[arg[1]];
+                            });
+                        })
+                        return this.$option.data[arg[1]];
+                    });
+                }
+            }
+        });
+    }
+}  
+let kvue = new KVue({
+    el: "#app",
+    data: {
+       message: "Hello KKB",
+       modelData: "呵呵",
+       name: "kkb",
+       age: 8,
+       htmlData: "<strong>圣诞节要陪我一起过吗</strong>"
+    }
+});
+/*
+    数据响应式: 
+        监听数据发生变化，如果数据发生了变化，就同步视图进行改变
+        实现原理:
+            1. 编译模板，找出需要插入数据的位置,把数据插入进去
+            2. 利用数据劫持，监听数据发生改变，如果数据发生改变，则找到对应的插入数据的位置，修改视图
+    数据和视图双向绑定：
+            1. 利用数据响应式监听数据发生改变，然后同步视图
+            2. 利用 change 或 input 等事件监听视图发生改变，然后修改数据
+
+    !!! 最起码面试之前，一定找出来，在回顾一遍
+*/
+</script>    
+</body>
+</html>

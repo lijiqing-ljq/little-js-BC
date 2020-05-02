@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<form id="form">
+    <input type="text" name="tel" />
+    <input type="text" name="user" />
+    <button type="button">提交</button>
+</form>  
+<script>
+let formData = {
+    tel: "",
+    user: ""
+};
+formData = new Proxy(formData,{
+    set(target,key,newVal){
+        if(key == "tel"){
+            if(isNaN(newVal)){
+                throw "电话只能是非数字";
+            }
+        }
+        target[key] = newVal;
+    }
+});
+console.log(formData);
+let input = document.querySelectorAll("#form input");
+input.forEach(item=>{
+    item.onchange = function(){
+        console.log(this);
+        formData[this.name] = item.value;
+    };
+});
+let btn = document.querySelector("button");
+btn.onclick = function(){
+    console.log(formData);
+}
+</script>  
+</body>
+</html>

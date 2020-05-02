@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<!-- 
+    模块化开发 
+        模块化是一种处理复杂系统分解为更好的可管理模块的方式
+        1个模块就是一个文件
+        1个模块最好是一个完整的功能
+    
+        es6 中化，只能在服务器环境下执行
+
+        1. 在 ES6 的模块化中，每个模块都是一个独立的作用域，相互之间不会命名冲突
+        2. 当我们在导入模块时,会把模块中的代码执行一遍
+-->
+<script type="module">
+// 默认情况下建议，把所有的依赖导入放在模块的最前边
+// import fn,{aName,age} from "./js/a.js";  
+// import * as obj from "./js/a.js";
+// import {b} from "./js/b.js";
+// import c from "./js/c.js";
+// //console.log(name,age,b,c);
+// //fn();
+// let {aName,age} = obj;
+// console.log(aName,age);
+// obj.default();
+
+// 按需加载
+
+// document.onclick = function(){
+//     //import fn from "./js/a.js";  
+//     //console.log(b);
+//     import("./js/a.js").then((data)=>{
+//         console.log(data);
+//     });
+// }
+
+document.onclick = async function(){
+    let data = await import("./js/a.js");
+    console.log(data);
+}
+
+</script>
+</body>
+</html>
