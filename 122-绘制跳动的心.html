@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>122-绘制跳动的心</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .all{
+            width: 450px;
+            height: 400px;
+            /*border: 1px solid #000;*/
+            box-sizing: border-box;
+            margin: 200px auto;
+            position: relative;
+        }
+        .left, .right{
+            width: 250px;
+            height: 250px;
+            background: red;
+            border-radius: 50%;
+            position: absolute;
+            /*left: 0;*/
+            top: 0;
+            box-shadow: 0 0 40px red;
+        }
+        .left{
+            left: 0;
+        }
+        .right{
+            /*width: 250px;*/
+            /*height: 250px;*/
+            /*background: red;*/
+            /*border-radius: 50%;*/
+            /*position: absolute;*/
+            right: 0;
+            /*top: 0;*/
+            /*box-shadow: 0 0 40px red;*/
+        }
+        .bottom{
+            width: 250px;
+            height: 250px;
+            background: red;
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            /*margin-left: -125px;*/
+            /*技巧: 在企业开发中推荐使用如下的方式让元素居中
+            水平居中: left:50%; transform: translateX(-50%);
+            垂直居中: top:50%; transform: translateY(-50%);
+            */
+            transform: translateX(-50%) rotateZ(45deg);
+            box-shadow: 0 0 40px red;
+        }
+        .all{
+            animation: sport 1s linear 0s infinite normal;
+        }
+        @keyframes sport {
+            0%{
+                transform: scale(1);
+            }
+            50%{
+                transform: scale(1.1);
+            }
+            100%{
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="all">
+    <!--左边的小圆-->
+    <div class="left"></div>
+    <!--右边的小圆-->
+    <div class="right"></div>
+    <!--底部的尖尖-->
+    <div class="bottom"></div>
+</div>
+</body>
+</html>

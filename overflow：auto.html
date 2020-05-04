@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>overflow:auto的用法</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/reset.css" />
+
+    <style type="text/css">
+        html,body,ul{
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .container{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .header{
+            width: 100%;
+            height: 100px;
+            background: #f99;
+        }
+        .content{
+            width: 100%;
+            /*可不设置高度*/
+            height: 100%;
+            overflow: auto;
+            background: yellow;
+            flex: 1;
+        }
+        .footer{
+            width: 100%;
+            height: 100px;
+            background: #99f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+
+        </div>
+        <div class="content">
+            <ul>
+                <!--<li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>111111</li>
+                <li>2222222222222</li>-->
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+
+        <div class="footer">
+        </div>
+    </div>
+</body>
+</html>
