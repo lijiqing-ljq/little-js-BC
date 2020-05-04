@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>144-圣杯布局</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .left, .right{
+            width: 200px;
+            height: 200px;
+            background: red;
+            float: left;
+        }
+        .center{
+            width: 100%;
+            height: 200px;
+            background: skyblue;
+            float: left;           
+        }
+        .box{
+            min-width: 400px;
+            padding: 0 200px;
+            background: purple;
+            overflow: hidden;
+            margin: 0 100px;
+        }
+        body{
+            min-width: 600px;
+        	/*width: 200px;*/
+        	/*height: 200px;*/
+        	/*margin: 0 auto;*/
+            /*text-align: center;*/
+            /*background: yellow;*/
+        }
+        .left{
+            margin-left: calc(-100% - 200px);
+            /*position: relative;
+            left: -200px;*/
+        }
+        .right{
+            /*margin-left: -200px;
+            position: relative;
+            left: 200px;*/
+            margin-right: -200px;
+        }
+    </style>
+</head>
+<body>
+<!--
+1.什么是圣杯布局和双飞翼布局
+两者实现的功能都一样, 都是用于实现两侧的宽度不变, 中间的宽度自适应的三栏布局的
+
+2.圣杯布局的步骤
+2.1搞一个容器, 里面放三个盒子
+2.2设置两侧盒子的宽度(固定)
+2.3设置中间盒子的宽度等于容器的宽度(100%)
+2.4设置容器的padding等于两侧盒子的宽度
+2.5让三个盒子都在同一个方向上浮动
+2.6设置左边盒子的margin-left=-100%
+2.7通过定位调整左边的盒子, 让左边的盒子不要盖住中间的区域
+2.8设置右边盒子的margin-left=-自身的宽度
+2.9通过定位调整右边的盒子, 让右边的盒子不要盖住中间的区域
+3.0给容器设置一个最小的宽度, 防止缩小后变形
+-->
+<div class="box">
+    <div class="center">中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容中间的内容</div>
+    <div class="left"></div>
+    <div class="right"></div>
+</div>
+</body>
+</html>
